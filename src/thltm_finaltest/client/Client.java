@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import thltm_finaltest.model.MessageType;
+import thltm_finaltest.model.Room;
 
 /**
  *
@@ -24,6 +26,7 @@ public class Client extends javax.swing.JFrame {
     ObjectInputStream receiver = null;
     Thread listener;
     boolean isRunning;
+    FileBrowser fileBrowser;
     /**
      * Creates new form Client
      */
@@ -43,9 +46,18 @@ public class Client extends javax.swing.JFrame {
                         System.out.println("type: " + type);
                         switch (type) {
                             case string:
+                                System.out.println("client: 1");
                                 String messageFromServer = (String) receiver.readObject();
                                 messageLabel.setText(messageFromServer);
-                                System.out.println("String");
+                                if (fileBrowser != null) {
+                                    fileBrowser.setMessage(messageFromServer);
+                                }
+                                break;
+                            case roomList:
+                                System.out.println("client: 2");
+                                ArrayList<Room> rooms = (ArrayList<Room>) receiver.readObject();
+                                fileBrowser.writeFile(rooms);
+                                break;
                             default:
                                 System.out.println("Can not cast data from socket to expect message type!");
                                 break;
@@ -61,9 +73,13 @@ public class Client extends javax.swing.JFrame {
             }
         });
         this.listener.start();
+        this.fileBrowser = new FileBrowser();
+        this.fileBrowser.setConnection(socket, sender, receiver);
+        fileBrowser.setVisible(true);
+        this.setVisible(false);
     }
 
-    private <T> void sendMessageToServer(MessageType type, T data) {
+    public <T> void sendMessageToServer(MessageType type, T data) {
         try {
             sender.writeObject(type);
             sender.writeObject(data);
@@ -151,6 +167,7 @@ public class Client extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void ipTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ipTextFieldActionPerformed
@@ -170,6 +187,7 @@ public class Client extends javax.swing.JFrame {
             this.connectButton.setEnabled(false);
             this.host = host;
             this.port = port;
+            this.start();
         } catch (Exception e) {
             System.out.println(e);
             this.messageLabel.setText("Failed to connect to server: " + host + " with port: " + portString);

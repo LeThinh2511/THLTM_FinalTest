@@ -5,17 +5,20 @@
  */
 package thltm_finaltest.model;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  *
  * @author thinhle
  */
-public class Teacher {
+public class Teacher implements Serializable {
     String name;
-    String birthday;
+    Date birthday;
     String schoolName;
     String code;
 
-    public Teacher(String name, String birthday, String schoolName, String code) {
+    public Teacher(String name, Date birthday, String schoolName, String code) {
         this.name = name;
         this.birthday = birthday;
         this.schoolName = schoolName;
@@ -30,11 +33,11 @@ public class Teacher {
         this.name = name;
     }
 
-    public String getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 

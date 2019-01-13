@@ -5,11 +5,13 @@
  */
 package thltm_finaltest.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author thinhle
  */
-public class Room {
+public class Room implements Serializable {
     String name;
     Teacher firstTeacher;
     Teacher secondTeacher;

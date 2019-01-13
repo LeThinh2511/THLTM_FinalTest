@@ -50,6 +50,8 @@ public class Server extends javax.swing.JFrame {
                             sender = new ObjectOutputStream(socket.getOutputStream());
                             receiver = new ObjectInputStream(socket.getInputStream());
                             sendMessageToClient(MessageType.string, "Connected");
+                            ClientHandler clientHandler = new ClientHandler(socket, receiver, sender);
+                            clientHandler.start();
                         } catch (IOException ex) {
                             messageLabel.setText(ex.getLocalizedMessage());
                         }

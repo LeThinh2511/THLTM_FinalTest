@@ -10,5 +10,5 @@ package thltm_finaltest.model;
  * @author thinhle
  */
 public enum MessageType {
-    string;
+    string, teacherList, roomList, teacher, room, isFinished;
 }
